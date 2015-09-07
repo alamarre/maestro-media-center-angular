@@ -48,6 +48,20 @@ chromecast.factory('chromecast', ['$http', 'remoteManager',function($http,remote
             if (session) {
                 session.addUpdateListener(this.sessionUpdateListener.bind(this));
             }
+            var id = "Chromecast - "+session.receiver.friendlyName;
+            remoteManager.setRemoteId(id);
+            var connectMessage = {
+                "action": "connect",
+                "port": window.location.port,
+                "scheme":window.location.protocol,
+                "guid": id,
+                "deviceName": id
+            };
+            connectMessage.serverUrls = serverUrls;
+            var either = function(){};
+            if(session) {
+               session.sendMessage('urn:x-cast:maestro', connectMessage, either, either);
+            }
         },
         onLaunchError: function(error){
             console.log(error);
@@ -59,12 +73,26 @@ chromecast.factory('chromecast', ['$http', 'remoteManager',function($http,remote
             if (session) {
                 session.addUpdateListener(this.sessionUpdateListener.bind(this));
             }
+            var id = "Chromecast - "+session.receiver.friendlyName;
+            remoteManager.setRemoteId(id);
+            var connectMessage = {
+                "action": "connect",
+                "port": window.location.port,
+                "scheme":window.location.protocol,
+                "guid": id,
+                "deviceName": id
+            };
+            connectMessage.serverUrls = serverUrls;
+            var either = function(){};
+            if(session) {
+               session.sendMessage('urn:x-cast:maestro', connectMessage, either, either);
+            }
         },
         sessionUpdateListener: function(isAlive) {
             console.log("session " + isAlive);
             if(!isAlive) {
                 session = false;
-            } 
+            }
         },
         receiverListener: function(e) {
             if (e === 'available') {
@@ -94,18 +122,11 @@ chromecast.factory('chromecast', ['$http', 'remoteManager',function($http,remote
             var playMessage = {
                 "action": "play",
                 "folder": folder,
-                "index": index,
-                "port": window.location.port,
-                "scheme":window.location.protocol,
-                "guid": id,
-                "deviceName": id
+                "index": index
             };
-            
-            playMessage.serverUrls = serverUrls;
+
             var either = function(){};
-            if(session) {
-                session.sendMessage('urn:x-cast:maestro', playMessage, either, either);
-            }
+            remoteManager.sendMessage(playMessage);
         }
 
     };
