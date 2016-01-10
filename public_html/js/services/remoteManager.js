@@ -51,6 +51,9 @@ remoteManager.factory('remoteManager', ['$q', 'cookies',function($q, cookies) {
                 }
             }
         },
+		getRemoteId: function() {
+            return remoteId;
+        },
         setRemoteId: function(id, permanent) {
             remoteId=id;
             if(permanent) {

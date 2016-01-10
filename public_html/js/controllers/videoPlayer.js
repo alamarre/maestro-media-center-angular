@@ -32,6 +32,7 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
         restrict: "A",
         link: function (scope, element, attributes, parentController) {
             var video = element[0];
+			video.preload="auto";
            
             playerManager.setPlayer(scope);
             
@@ -65,6 +66,7 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
                                     
                                         scope.sources = ["/videos"+nextFolder+"/"+result.files[0]];
                                         element.attr("src",scope.sources[0]);
+										
                                         video.load();
                                         $location.search({index:0,folder: nextFolder}).replace(); 
                                     });

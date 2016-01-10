@@ -14,19 +14,11 @@ var maestroApp = angular.module('maestroApp', [
   'mainMenu',
   'keyHandler',
   'videoPlayer',
+  'videoPlayerProxy',
   'settings',
   'remoteManager',
   'remoteControl'
 ]);
-
-maestroApp.filter('uri', function() {
-    return function(input) {
-        if(typeof input == "undefined") {
-            return "";
-        }
-        return window.encodeURIComponent(input);
-    };
-});
 
 maestroApp.config(['$routeProvider', '$locationProvider', '$compileProvider', '$controllerProvider',
   function($routeProvider, $locationProvider, $compileProvider, $controllerProvider) {
@@ -53,6 +45,11 @@ maestroApp.config(['$routeProvider', '$locationProvider', '$compileProvider', '$
         controller: 'VideoPlayerController',
         reloadOnSearch: false
       }).
+	  when('/playerproxy.html', {
+	  templateUrl: 'templates/videoPlayerProxy.html',
+        controller: 'VideoPlayerProxyController',
+        reloadOnSearch: false
+      }).
       when('/settings.html', {
         templateUrl: 'templates/settings.html',
         controller: 'SettingsController'
@@ -62,6 +59,15 @@ maestroApp.config(['$routeProvider', '$locationProvider', '$compileProvider', '$
         controller: 'RemoteController'
       })
   }]);
+  
+maestroApp.filter('uri', function() {
+	return function(input) {
+		if(typeof input == "undefined") {
+			return "";
+		}
+		return window.encodeURIComponent(input);
+	};
+});
   
 maestroApp.factory('Page', function() {
    var title = ' ';
