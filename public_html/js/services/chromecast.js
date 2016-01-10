@@ -42,7 +42,28 @@ chromecast.factory('chromecast', ['$http', 'remoteManager',function($http,remote
             });
         },
         launch: function() {
-            chrome.cast.requestSession(this.sessionListener.bind(this), this.onLaunchError.bind(this));
+            chrome.cast.requestSession(this.onRequestSessionSuccess.bind(this), this.onLaunchError.bind(this));
+        },
+        onRequestSessionSuccess: function(e){
+            console.log("session success");
+            session = e;
+            if (session) {
+                session.addUpdateListener(this.sessionUpdateListener.bind(this));
+            }
+            var id = "Chromecast - "+session.receiver.friendlyName;
+            remoteManager.setRemoteId(id);
+            var connectMessage = {
+                "action": "connect",
+                "port": window.location.port,
+                "scheme":window.location.protocol,
+                "guid": id,
+                "deviceName": id
+            };
+            connectMessage.serverUrls = serverUrls;
+            var either = function(){};
+            if(session) {
+               session.sendMessage('urn:x-cast:maestro', connectMessage, either, either);
+            }
         },
         onLaunchError: function(error){
             console.log(error);

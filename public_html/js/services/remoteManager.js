@@ -15,7 +15,7 @@ remoteManager.factory('remoteManager', ['$q', 'cookies',function($q, cookies) {
                 remoteId = possibleRemoteId;
             }
             var port = parseInt(window.location.port)+1
-            socket= new WebSocket("ws://"+window.location.hostname+":"+port+"/events"); 
+            socket= new WebSocket("ws://"+window.location.hostname+":"+port+"/events");
             var remote = this;
             socket.onmessage = this.handleMessage;
             socket.onopen = function() {
@@ -71,7 +71,7 @@ remoteManager.factory('remoteManager', ['$q', 'cookies',function($q, cookies) {
             } else {
                 availableDeferrals.push(deferred);
             }
-            
+
             return promise;
         },
         skipBack: function() {
@@ -98,6 +98,14 @@ remoteManager.factory('remoteManager', ['$q', 'cookies',function($q, cookies) {
         toggleVisibility: function() {
             this.sendMessage({"action":"toggleVisibility"});
         },
+        playRemotely: function(folder, index) {
+            var playMessage = {
+                "action": "play",
+                "folder": folder,
+                "index": index
+            };
+
+            this.sendMessage(playMessage);
+        }
      }
 }]);
-
