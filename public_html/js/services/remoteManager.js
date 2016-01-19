@@ -2,16 +2,16 @@ var remoteManager = angular.module('remoteManager', [
     'cookies'
 ]);
 
-remoteManager.factory('remoteManager', ['$q', 'cookies',function($q, cookies) {
+remoteManager.factory('remoteManager', ['$q', '$location', 'cookies',function($q, $location, cookies) {
     var socket;
     var selfId = guid();
     var available;
-    var remoteId = null;
+    var remoteId = $location.search().remoteId;
     var availableDeferrals = [];
     return {
         connect: function() {
             var possibleRemoteId = cookies.getCookie("remoteId");
-            if(possibleRemoteId!="") {
+            if(possibleRemoteId && !remoteId) {
                 remoteId = possibleRemoteId;
             }
             var port = parseInt(window.location.port)+1
