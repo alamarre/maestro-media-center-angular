@@ -7,12 +7,17 @@ remoteManager.factory('remoteManager', ['$q', '$location', 'cookies',function($q
     var selfId = guid();
     var available;
     var remoteId = $location.search().remoteId;
+    var controlRemote = true;
     var availableDeferrals = [];
     return {
         connect: function() {
             var possibleRemoteId = cookies.getCookie("remoteId");
             if(possibleRemoteId && !remoteId) {
                 remoteId = possibleRemoteId;
+            }
+            var remoteCookie = cookies.getCookie("controlRemote");
+            if(remoteCookie=="false") {
+              controlRemote = false;
             }
             var port = parseInt(window.location.port)+1
             socket= new WebSocket("ws://"+window.location.hostname+":"+port+"/events");
@@ -51,17 +56,21 @@ remoteManager.factory('remoteManager', ['$q', '$location', 'cookies',function($q
                 }
             }
         },
-		getRemoteId: function() {
+		    getRemoteId: function() {
             return remoteId;
         },
         setRemoteId: function(id, permanent) {
             remoteId=id;
             if(permanent) {
                 cookies.setCookie("remoteId",id,1000);
+                cookies.setCookie("controlRemote", "true", 1);
             }
         },
+        controlRemote: function(control) {
+          cookies.setCookie("controlRemote", ""+control, 1000);
+        },
         isRemoteSet: function() {
-            return remoteId != null;
+            return controlRemote && remoteId != null;
         },
         getHosts: function() {
             var deferred = $q.defer();
