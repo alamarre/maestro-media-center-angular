@@ -12,6 +12,9 @@ return {
         },
     })
     .success(function(result) {
+        result.files = result.files.filter(function(file) {
+            return file.indexOf(".mp4") == (file.length-".mp4".length);
+        });
         deferred.resolve(result);
     });
     return deferred.promise;

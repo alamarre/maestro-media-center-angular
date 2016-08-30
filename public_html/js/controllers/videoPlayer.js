@@ -23,7 +23,7 @@ videoPlayer.controller('VideoPlayerController', ['$scope', '$location','videoFol
                 $scope.index = index;
                 $scope.folder = folder;
                 $scope.sources = ["/videos"+folder+"/"+result.files[index]];
-
+                $scope.subtitle = $scope.sources[0].replace(".mp4",".vtt");
             });
         }
 
@@ -37,7 +37,8 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
         link: function (scope, element, attributes, parentController) {
             var video = element[0];
 			video.preload="auto";
-           
+
+
             playerManager.setPlayer(scope);
 
             scope.skipForward = function() {
@@ -69,9 +70,11 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
                                         scope.folder = nextFolder;
 
                                         scope.sources = ["/videos"+nextFolder+"/"+result.files[0]];
+                                        scope.subtitle = scope.sources[0].replace(".mp4",".vtt");
                                         element.attr("src",scope.sources[0]);
-										
+
                                         video.load();
+                                        video.play();
                                         $location.search({index:0,folder: nextFolder}).replace();
                                     });
                                     return;
@@ -84,8 +87,11 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
                             scope.index = index;
                             scope.folder = folder;
                             scope.sources = ["/videos"+folder+"/"+result.files[index]];
+                            scope.subtitle = scope.sources[0].replace(".mp4",".vtt");
                             element.attr("src",scope.sources[0]);
+
                             video.load();
+                            video.play();
                             $location.search({index:index,folder:folder}).replace();
                         });
                     }
@@ -112,8 +118,10 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
                                     scope.index = index;
                                     scope.folder = previousFolder;
                                     scope.sources = ["/videos"+previousFolder+"/"+result.files[index]];
+                                    scope.subtitle = scope.sources[0].replace(".mp4",".vtt");
                                     element.attr("src",scope.sources[0]);
                                     video.load();
+                                    video.play();
                                     $location.search({index:index,folder: previousFolder}).replace();
                                 });
                                 break;
@@ -126,8 +134,10 @@ videoPlayer.directive('maestroPlayer', ['videoFolderList','$location','playerMan
                         scope.index = index;
                         scope.folder = folder;
                         scope.sources = ["/videos"+folder+"/"+result.files[index]];
+                        scope.subtitle = scope.sources[0].replace(".mp4",".vtt");
                         element.attr("src",scope.sources[0]);
                         video.load();
+                        video.play();
                         $location.search({index:index,folder:folder}).replace();
                     });
                 }
